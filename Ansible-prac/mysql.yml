@@ -1,0 +1,23 @@
+- name: Install MySQL
+  hosts: mysql_servers
+  become: yes
+  tasks:
+    - name: MySQL server installation and enable
+      ansible.builtin.yum:
+        name: mysql-server
+        state: present
+        enabled: yes
+
+    - name: Create a MySQL user
+      ansible.builtin.mysql_user:
+        name: myuser
+        password: mypassword
+        priv: '*.*:ALL'
+        state: present
+
+    - name: Ensure MySQL service is running
+      ansible.builtin.service:
+        name: mysqld
+        state: started
+        enabled: yes
+        
